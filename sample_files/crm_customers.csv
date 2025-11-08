@@ -1,0 +1,7 @@
+customer_id,username,email,first_name,last_name,registration_date,role
+1,user1,user1@example.com,User,One,2024-01-15,user
+2,user2,user2@example.com,User,Two,2024-02-20,user
+3,admin1,admin1@example.com,Admin,One,2024-01-10,administrator
+4,prothetic1,prothetic1@example.com,Prothetic,One,2024-03-01,prothetic_user
+5,prothetic2,prothetic2@example.com,Prothetic,Two,2024-03-05,prothetic_user
+6,prothetic3,prothetic3@example.com,Prothetic,Three,2024-03-10,prothetic_user
