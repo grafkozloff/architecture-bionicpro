@@ -1,0 +1,5 @@
+order_id,customer_id,order_date,product_type,status,total_amount
+1,4,2024-03-01,Bionic Hand Pro,completed,150000.00
+2,5,2024-03-05,Bionic Hand Standard,completed,120000.00
+3,6,2024-03-10,Bionic Hand Pro,completed,150000.00
+4,1,2024-03-15,Bionic Arm Standard,pending,200000.00
