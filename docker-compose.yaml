@@ -11,6 +11,9 @@ services:
       - ./postgres-keycloak-data:/var/lib/postgresql/data
     ports:
       - "5433:5432"
+    networks:
+      - bionicpro-network
+
   keycloak:
     image: quay.io/keycloak/keycloak:21.1
     environment:
@@ -29,6 +32,9 @@ services:
       - "8080:8080"
     depends_on:
       - keycloak_db
+    networks:
+      - bionicpro-network
+
   frontend:
     build:
       context: ./frontend
@@ -251,7 +257,7 @@ services:
       dockerfile: Dockerfile
     container_name: reporting-api
     ports:
-      - "8082:8082"
+      - "8000:8000"
     environment:
       SPRING_DATASOURCE_URL: jdbc:ch:http://clickhouse:8123/olap_db
       SPRING_DATASOURCE_USERNAME: airflow
@@ -260,12 +266,15 @@ services:
       SPRING_DATA_JPA_REPOSITORIES_ENABLED: "false"
       SPRING_JPA_ENABLED: "false"
       SPRING_DATASOURCE_INITIALIZE: "false"
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: http://localhost:8080/realms/reports-realm
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI: http://keycloak:8080/realms/reports-realm/protocol/openid-connect/certs
+      LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY: DEBUG
     depends_on:
       - clickhouse
     networks:
       - bionicpro-network
     healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8082/api/reports/health"]
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8000/reports/health"]
       interval: 30s
       timeout: 10s
       retries: 3
