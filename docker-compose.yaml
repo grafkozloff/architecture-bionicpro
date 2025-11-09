@@ -245,6 +245,31 @@ services:
     networks:
       - bionicpro-network
 
+  reporting-api:
+    build:
+      context: ./reporting_api
+      dockerfile: Dockerfile
+    container_name: reporting-api
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:ch:http://clickhouse:8123/olap_db
+      SPRING_DATASOURCE_USERNAME: airflow
+      SPRING_DATASOURCE_PASSWORD: airflow
+      SPRING_DATA_JDBC_REPOSITORIES_ENABLED: "false"
+      SPRING_DATA_JPA_REPOSITORIES_ENABLED: "false"
+      SPRING_JPA_ENABLED: "false"
+      SPRING_DATASOURCE_INITIALIZE: "false"
+    depends_on:
+      - clickhouse
+    networks:
+      - bionicpro-network
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8082/api/reports/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
 volumes:
   postgres_crm_data:
   postgres_telemetry_data:
